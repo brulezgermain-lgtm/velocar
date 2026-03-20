@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VeloCar — Déposer une annonce partenaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --carbon: #141414;
+    --steel: #1e1e1e;
+    --red: #e63232;
+    --gold: #c9a84c;
+    --white: #f5f5f0;
+    --muted: #888;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--carbon);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; }
+  .logo span { color: var(--red); }
+  .badge-pro {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    padding: 5px 12px;
+    border-radius: 2px;
+  }
+
+  /* HERO COMPACT */
+  .page-hero {
+    background: var(--carbon);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(201,168,76,0.05), transparent 60%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .hero-title span { color: var(--gold); }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  /* STEPS BAR */
+  .steps-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 40px;
+    background: var(--steel);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .step.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .step.done { color: var(--white); }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .step.active .step-num { background: var(--gold); color: var(--black); }
+  .step.done .step-num { background: var(--red); color: white; }
+  .step-sep { color: var(--border); padding: 0 4px; }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* FORM SECTIONS */
+  .form-section {
+    background: var(--carbon);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 24px;
+    display: none;
+  }
+  .form-section.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .section-subtitle {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* FIELDS */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .field-row.single { grid-template-columns: 1fr; }
+  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  label {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+  label span { color: var(--red); }
+
+  input, select, textarea {
+    background: var(--steel);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: rgba(201,168,76,0.5);
+  }
+  textarea { resize: vertical; min-height: 100px; }
+  select option { background: var(--steel); }
+
+  /* ÉQUIPEMENTS CHECKBOXES */
+  .checkboxes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--steel);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    font-size: 0.85rem;
+  }
+  .checkbox-item:hover { border-color: rgba(201,168,76,0.3); }
+  .checkbox-item input[type="checkbox"] {
+    width: 16px; height: 16px;
+    min-width: 16px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+  .checkbox-item.checked { border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.05); }
+
+  /* PHOTO UPLOAD */
+  .photo-upload-area {
+    border: 2px dashed rgba(201,168,76,0.3);
+    border-radius: 4px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(201,168,76,0.02);
+    position: relative;
+  }
+  .photo-upload-area:hover { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+  .photo-upload-area input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .upload-text { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+  .upload-text strong { color: var(--gold); }
+  .photos-preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .photo-thumb {
+    aspect-ratio: 4/3;
+    background: var(--steel);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-thumb .remove-photo {
+    position: absolute;
+    top: 4px; right: 4px;
+    background: rgba(230,50,50,0.9);
+    border: none;
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* NAVIGATION BUTTONS */
+  .form-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .btn-prev {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 12px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-prev:hover { border-color: var(--white); color: var(--white); }
+  .btn-next {
+    background: var(--gold);
+    border: none;
+    color: var(--black);
+    padding: 14px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-next:hover { background: #dbb95a; transform: translateY(-1px); }
+  .btn-submit {
+    background: var(--red);
+    border: none;
+    color: white;
+    padding: 16px 48px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #ff1a1a; transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* PROGRESS */
+  .progress-info {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* RECAP */
+  .recap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .recap-item {
+    background: var(--steel);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 2px;
+  }
+  .recap-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .recap-value { font-size: 0.9rem; font-weight: 500; }
+
+  /* SUCCESS */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 40px;
+  }
+  .success-screen.visible { display: block; animation: fadeIn 0.5s ease; }
+  .success-icon { font-size: 4rem; margin-bottom: 24px; }
+  .success-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .success-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 480px; margin: 0 auto 32px; }
+  .success-details {
+    background: var(--carbon);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    header { padding: 16px 20px; }
+    .page-hero { padding: 32px 20px; }
+    .steps-bar { padding: 0 10px; }
+    main { padding: 24px 20px 60px; }
+    .field-row { grid-template-columns: 1fr; }
+    .field-row.triple { grid-template-columns: 1fr 1fr; }
+    .checkboxes-grid { grid-template-columns: 1fr 1fr; }
+    .photos-preview { grid-template-columns: repeat(3, 1fr); }
+    .recap-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">VELO<span>CAR</span></div>
+  <div class="badge-pro">// ESPACE PARTENAIRE</div>
+</header>
+
+<div class="page-hero">
+  <div class="hero-label">// Dépôt d'annonce</div>
+  <h1 class="hero-title">PUBLIER UN<br><span>VÉHICULE</span></h1>
+  <p class="hero-sub">Remplissez les informations ci-dessous. Votre annonce sera examinée par l'équipe VeloCar et mise en ligne sous 24h.</p>
+</div>
+
+<div class="steps-bar">
+  <div class="step active" id="step-tab-1">
+    <span class="step-num">1</span> Votre établissement
+  </div>
+  <span class="step-sep">›</span>
+  <div class="step" id="step-tab-2">
+    <span class="step-num">2</span> Informations véhicule
+  </div>
+  <span class="step-sep">›</span>
+  <div class="step" id="step-tab-3">
+    <span class="step-num">3</span> Détails & équipements
+  </div>
+  <span class="step-sep">›</span>
+  <div class="step" id="step-tab-4">
+    <span class="step-num">4</span> Photos
+  </div>
+  <span class="step-sep">›</span>
+  <div class="step" id="step-tab-5">
+    <span class="step-num">5</span> Récapitulatif
+  </div>
+</div>
+
+<main>
+
+  <!-- ÉTAPE 1 — ÉTABLISSEMENT -->
+  <div class="form-section active" id="section-1">
+    <div class="section-title">VOTRE ÉTABLISSEMENT</div>
+    <div class="section-subtitle">Ces informations apparaîtront sur vos annonces VeloCar.</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Nom du garage / concession <span>*</span></label>
+        <input type="text" id="nomGarage" placeholder="Ex : Garage Martin Automobiles">
+      </div>
+      <div class="field">
+        <label>Votre nom & prénom <span>*</span></label>
+        <input type="text" id="nomContact" placeholder="Ex : Jean Martin">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Téléphone <span>*</span></label>
+        <input type="text" id="telContact" placeholder="04 XX XX XX XX">
+      </div>
+      <div class="field">
+        <label>Email professionnel <span>*</span></label>
+        <input type="email" id="emailContact" placeholder="contact@garage-martin.fr">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Ville <span>*</span></label>
+        <input type="text" id="villeGarage" placeholder="Ex : Annecy">
+      </div>
+      <div class="field">
+        <label>Département</label>
+        <select id="deptGarage">
+          <option value="">Sélectionner</option>
+          <option>Haute-Savoie (74)</option>
+          <option>Savoie (73)</option>
+          <option>Isère (38)</option>
+          <option>Rhône (69)</option>
+          <option>Ain (01)</option>
+          <option>Drôme (26)</option>
+          <option>Ardèche (07)</option>
+          <option>Loire (42)</option>
+          <option>Haute-Loire (43)</option>
+          <option>Puy-de-Dôme (63)</option>
+          <option>Allier (03)</option>
+          <option>Cantal (15)</option>
+          <option>Autre</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row single">
+      <div class="field">
+        <label>Votre plan VeloCar</label>
+        <select id="planGarage">
+          <option>Essai gratuit 30 jours</option>
+          <option>Plan Starter — 99€/mois</option>
+          <option selected>Plan Pro — 299€/mois</option>
+          <option>Plan Expert — 599€/mois</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <div class="progress-info">ÉTAPE 1 / 5</div>
+      <button class="btn-next" id="next-1">CONTINUER →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 — INFOS VÉHICULE -->
+  <div class="form-section" id="section-2">
+    <div class="section-title">INFORMATIONS DU VÉHICULE</div>
+    <div class="section-subtitle">Renseignez les caractéristiques principales du véhicule.</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Marque <span>*</span></label>
+        <select id="marqueVehicule">
+          <option value="">Sélectionner</option>
+          <optgroup label="🇫🇷 Françaises">
+            <option>Peugeot</option><option>Renault</option><option>Citroën</option>
+            <option>DS</option><option>Alpine</option><option>Dacia</option>
+          </optgroup>
+          <optgroup label="🇩🇪 Allemandes">
+            <option>BMW</option><option>Mercedes</option><option>Volkswagen</option>
+            <option>Audi</option><option>Porsche</option><option>Opel</option>
+          </optgroup>
+          <optgroup label="🇯🇵 Japonaises">
+            <option>Toyota</option><option>Honda</option><option>Nissan</option>
+            <option>Mazda</option><option>Mitsubishi</option><option>Subaru</option>
+          </optgroup>
+          <optgroup label="🇺🇸 Américaines">
+            <option>Tesla</option><option>Ford</option><option>Jeep</option>
+          </optgroup>
+          <optgroup label="🇮🇹 Italiennes">
+            <option>Ferrari</option><option>Lamborghini</option><option>Maserati</option>
+            <option>Alfa Romeo</option><option>Fiat</option>
+          </optgroup>
+          <optgroup label="🇬🇧 Britanniques">
+            <option>Bentley</option><option>Rolls-Royce</option><option>Aston Martin</option>
+            <option>McLaren</option><option>Land Rover</option>
+          </optgroup>
+          <optgroup label="Autres">
+            <option>Kia</option><option>Hyundai</option><option>Volvo</option>
+            <option>Autre</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Modèle <span>*</span></label>
+        <input type="text" id="modeleVehicule" placeholder="Ex : 3008, Série 3, Golf...">
+      </div>
+    </div>
+    <div class="field-row triple">
+      <div class="field">
+        <label>Année <span>*</span></label>
+        <select id="anneeVehicule"></select>
+      </div>
+      <div class="field">
+        <label>Kilométrage <span>*</span></label>
+        <input type="number" id="kmVehicule" placeholder="Ex : 45000">
+      </div>
+      <div class="field">
+        <label>Prix de vente TTC <span>*</span></label>
+        <input type="number" id="prixVehicule" placeholder="Ex : 18500">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Carburant <span>*</span></label>
+        <select id="carburantVehicule">
+          <option value="">Sélectionner</option>
+          <option>Essence</option>
+          <option>Diesel</option>
+          <option>Hybride rechargeable (PHEV)</option>
+          <option>Hybride (HEV)</option>
+          <option>100% Électrique</option>
+          <option>Mild Hybrid</option>
+          <option>GPL</option>
+          <option>GNV</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Boîte de vitesses</label>
+        <select id="boiteVehicule">
+          <option>Manuelle</option>
+          <option>Automatique</option>
+          <option>DSG / EDC / EAT</option>
+          <option>CVT</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Motorisation</label>
+        <input type="text" id="motorisationVehicule" placeholder="Ex : 1.5 BlueHDi 130ch">
+      </div>
+      <div class="field">
+        <label>Puissance (ch)</label>
+        <input type="number" id="puissanceVehicule" placeholder="Ex : 130">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Couleur extérieure</label>
+        <input type="text" id="couleurVehicule" placeholder="Ex : Gris Artense, Blanc Nacré...">
+      </div>
+      <div class="field">
+        <label>Nombre de portes</label>
+        <select id="portesVehicule">
+          <option>2 portes</option>
+          <option>3 portes</option>
+          <option selected>5 portes</option>
+          <option>4 portes (berline)</option>
+          <option>Break</option>
+          <option>SUV / 4x4</option>
+          <option>Cabriolet</option>
+          <option>Utilitaire</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" id="prev-2">← RETOUR</button>
+      <div class="progress-info">ÉTAPE 2 / 5</div>
+      <button class="btn-next" id="next-2">CONTINUER →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 — DÉTAILS & ÉQUIPEMENTS -->
+  <div class="form-section" id="section-3">
+    <div class="section-title">DÉTAILS & ÉQUIPEMENTS</div>
+    <div class="section-subtitle">Plus votre annonce est détaillée, plus elle attire des acheteurs sérieux.</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Contrôle technique</label>
+        <select id="ctVehicule">
+          <option>Valide (moins de 6 mois)</option>
+          <option>Valide (moins de 2 ans)</option>
+          <option>À prévoir</option>
+          <option>Non requis (neuf)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Nombre de propriétaires</label>
+        <select id="proprietairesVehicule">
+          <option>1er main</option>
+          <option>2ème main</option>
+          <option>3ème main</option>
+          <option>Non communiqué</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>État général</label>
+        <select id="etatVehicule">
+          <option>Excellent — Aucun défaut</option>
+          <option selected>Très bon — Légères traces d'usage</option>
+          <option>Bon — Quelques marques à signaler</option>
+          <option>Correct — À voir en détail</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Garantie proposée</label>
+        <select id="garantieVehicule">
+          <option>Sans garantie</option>
+          <option>Garantie 3 mois</option>
+          <option>Garantie 6 mois</option>
+          <option selected>Garantie 12 mois</option>
+          <option>Garantie 24 mois</option>
+          <option>Garantie constructeur restante</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom: 20px;">
+      <label>Équipements & options</label>
+      <div class="checkboxes-grid" id="equipementsGrid">
+        <label class="checkbox-item"><input type="checkbox" value="GPS / Navigation"> GPS / Navigation</label>
+        <label class="checkbox-item"><input type="checkbox" value="Caméra de recul"> Caméra de recul</label>
+        <label class="checkbox-item"><input type="checkbox" value="Climatisation auto"> Climatisation auto</label>
+        <label class="checkbox-item"><input type="checkbox" value="Sièges chauffants"> Sièges chauffants</label>
+        <label class="checkbox-item"><input type="checkbox" value="Toit ouvrant / Panoramique"> Toit ouvrant</label>
+        <label class="checkbox-item"><input type="checkbox" value="Radar de stationnement"> Radar parking</label>
+        <label class="checkbox-item"><input type="checkbox" value="Apple CarPlay / Android Auto"> CarPlay / Android</label>
+        <label class="checkbox-item"><input type="checkbox" value="Régulateur de vitesse adaptatif"> Régulateur adaptatif</label>
+        <label class="checkbox-item"><input type="checkbox" value="Jantes alliage"> Jantes alliage</label>
+        <label class="checkbox-item"><input type="checkbox" value="Phares LED / Xénon"> Phares LED / Xénon</label>
+        <label class="checkbox-item"><input type="checkbox" value="Système audio premium"> Audio premium</label>
+        <label class="checkbox-item"><input type="checkbox" value="Sellerie cuir"> Sellerie cuir</label>
+        <label class="checkbox-item"><input type="checkbox" value="Aide au maintien de voie"> Aide maintien voie</label>
+        <label class="checkbox-item"><input type="checkbox" value="Freinage automatique d'urgence"> Freinage urgence</label>
+        <label class="checkbox-item"><input type="checkbox" value="Charge rapide (électrique)"> Charge rapide</label>
+      </div>
+    </div>
+
+    <div class="field-row single">
+      <div class="field">
+        <label>Description libre</label>
+        <textarea id="descriptionVehicule" placeholder="Décrivez le véhicule librement : historique, entretien, particularités, points forts..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" id="prev-3">← RETOUR</button>
+      <div class="progress-info">ÉTAPE 3 / 5</div>
+      <button class="btn-next" id="next-3">CONTINUER →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 — PHOTOS -->
+  <div class="form-section" id="section-4">
+    <div class="section-title">PHOTOS DU VÉHICULE</div>
+    <div class="section-subtitle">Les annonces avec photos reçoivent 5x plus de contacts. Ajoutez jusqu'à 10 photos.</div>
+
+    <div class="photo-upload-area" id="uploadArea">
+      <input type="file" id="photoInput" accept="image/*" multiple>
+      <div class="upload-icon">📸</div>
+      <div class="upload-text">
+        <strong>Cliquez ou glissez vos photos ici</strong><br>
+        JPG, PNG acceptés · Maximum 10 photos · 5 Mo par photo<br>
+        <span style="font-size:0.8rem; color:var(--muted);">Recommandé : extérieur face, 3/4, arrière, intérieur, tableau de bord</span>
+      </div>
+    </div>
+
+    <div class="photos-preview" id="photosPreview"></div>
+
+    <div style="margin-top:20px; padding:16px; background:rgba(201,168,76,0.05); border:1px solid rgba(201,168,76,0.15); border-radius:2px;">
+      <p style="font-size:0.8rem; color:var(--muted); line-height:1.6;">
+        💡 <strong style="color:var(--gold)">Conseil :</strong> Prenez les photos de jour, dans un endroit propre. La première photo sera utilisée comme image principale de l'annonce.
+      </p>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" id="prev-4">← RETOUR</button>
+      <div class="progress-info">ÉTAPE 4 / 5</div>
+      <button class="btn-next" id="next-4">VÉRIFIER L'ANNONCE →</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 — RÉCAPITULATIF -->
+  <div class="form-section" id="section-5">
+    <div class="section-title">RÉCAPITULATIF DE L'ANNONCE</div>
+    <div class="section-subtitle">Vérifiez les informations avant d'envoyer. Notre équipe vous contacte sous 24h.</div>
+
+    <div id="recapContent"></div>
+
+    <div style="padding:16px; background:rgba(230,50,50,0.05); border:1px solid rgba(230,50,50,0.15); border-radius:2px; margin-bottom:24px;">
+      <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">
+        En soumettant cette annonce, vous confirmez que les informations fournies sont exactes et que vous êtes autorisé à vendre ce véhicule.
+        VeloCar se réserve le droit de refuser toute annonce ne respectant pas nos standards de qualité.
+      </p>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-prev" id="prev-5">← MODIFIER</button>
+      <div class="progress-info">ÉTAPE 5 / 5</div>
+      <button class="btn-submit" id="submitAnnonce">SOUMETTRE L'ANNONCE →</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">🎉</div>
+    <h2 class="success-title" style="font-family:'Bebas Neue',sans-serif; letter-spacing:3px;">ANNONCE SOUMISE !</h2>
+    <p class="success-sub">Votre annonce a été transmise à l'équipe VeloCar. Nous la vérifions et la mettons en ligne sous <strong style="color:var(--white)">24 heures ouvrées</strong>.</p>
+    <div class="success-details">
+      <p style="font-size:0.8rem; color:var(--muted); margin-bottom:12px;">// PROCHAINES ÉTAPES</p>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <span style="color:var(--gold); font-weight:700; flex-shrink:0;">1.</span>
+          <span style="font-size:0.85rem; color:var(--muted);">Notre équipe vérifie les informations et les photos</span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <span style="color:var(--gold); font-weight:700; flex-shrink:0;">2.</span>
+          <span style="font-size:0.85rem; color:var(--muted);">L'annonce est publiée sur velocar.fr sous 24h</span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <span style="color:var(--gold); font-weight:700; flex-shrink:0;">3.</span>
+          <span style="font-size:0.85rem; color:var(--muted);">Les leads qualifiés vous sont transmis directement</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:24px;">
+      <button class="btn-next" onclick="location.reload()">DÉPOSER UNE AUTRE ANNONCE</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function() {
+
+  // =====================
+  // ANNÉES
+  // =====================
+  var selAnnee = document.getElementById('anneeVehicule');
+  var now = new Date().getFullYear();
+  for (var y = now; y >= 1980; y--) {
+    var o = document.createElement('option');
+    o.value = y; o.textContent = y;
+    if (y === now - 3) o.selected = true;
+    selAnnee.appendChild(o);
+  }
+
+  // =====================
+  // NAVIGATION ÉTAPES
+  // =====================
+  var currentStep = 1;
+
+  function goTo(step) {
+    document.getElementById('section-' + currentStep).classList.remove('active');
+    document.getElementById('step-tab-' + currentStep).classList.remove('active');
+    if (currentStep < step) document.getElementById('step-tab-' + currentStep).classList.add('done');
+    currentStep = step;
+    document.getElementById('section-' + step).classList.add('active');
+    document.getElementById('step-tab-' + step).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function validerEtape1() {
+    var nom = document.getElementById('nomGarage').value.trim();
+    var contact = document.getElementById('nomContact').value.trim();
+    var tel = document.getElementById('telContact').value.trim();
+    var email = document.getElementById('emailContact').value.trim();
+    var ville = document.getElementById('villeGarage').value.trim();
+    if (!nom || !contact || !tel || !email || !ville) {
+      alert('Veuillez remplir tous les champs obligatoires (*)');
+      return false;
+    }
+    return true;
+  }
+
+  function validerEtape2() {
+    var marque = document.getElementById('marqueVehicule').value;
+    var modele = document.getElementById('modeleVehicule').value.trim();
+    var km = document.getElementById('kmVehicule').value;
+    var prix = document.getElementById('prixVehicule').value;
+    var carburant = document.getElementById('carburantVehicule').value;
+    if (!marque || !modele || !km || !prix || !carburant) {
+      alert('Veuillez remplir tous les champs obligatoires (*)');
+      return false;
+    }
+    return true;
+  }
+
+  document.getElementById('next-1').addEventListener('click', function() {
+    if (validerEtape1()) goTo(2);
+  });
+  document.getElementById('next-2').addEventListener('click', function() {
+    if (validerEtape2()) goTo(3);
+  });
+  document.getElementById('next-3').addEventListener('click', function() {
+    goTo(4);
+  });
+  document.getElementById('next-4').addEventListener('click', function() {
+    genererRecap();
+    goTo(5);
+  });
+
+  document.getElementById('prev-2').addEventListener('click', function() { goTo(1); });
+  document.getElementById('prev-3').addEventListener('click', function() { goTo(2); });
+  document.getElementById('prev-4').addEventListener('click', function() { goTo(3); });
+  document.getElementById('prev-5').addEventListener('click', function() { goTo(4); });
+
+  // =====================
+  // PHOTOS
+  // =====================
+  var photos = [];
+
+  document.getElementById('photoInput').addEventListener('change', function(e) {
+    var files = Array.from(e.target.files);
+    files.forEach(function(file) {
+      if (photos.length >= 10) return;
+      if (!file.type.startsWith('image/')) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        photos.push({ name: file.name, data: ev.target.result });
+        renderPhotos();
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = '';
+  });
+
+  function renderPhotos() {
+    var preview = document.getElementById('photosPreview');
+    preview.innerHTML = '';
+    photos.forEach(function(p, i) {
+      var div = document.createElement('div');
+      div.className = 'photo-thumb';
+      div.innerHTML = '<img src="' + p.data + '" alt="Photo ' + (i+1) + '">' +
+        '<button class="remove-photo" data-idx="' + i + '">✕</button>';
+      preview.appendChild(div);
+    });
+    document.querySelectorAll('.remove-photo').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        photos.splice(parseInt(this.getAttribute('data-idx')), 1);
+        renderPhotos();
+      });
+    });
+  }
+
+  // =====================
+  // RÉCAPITULATIF
+  // =====================
+  function genererRecap() {
+    var equipements = [];
+    document.querySelectorAll('#equipementsGrid input[type="checkbox"]:checked').forEach(function(cb) {
+      equipements.push(cb.value);
+    });
+
+    var html = '<div class="recap-grid">' +
+      recapItem('Établissement', document.getElementById('nomGarage').value) +
+      recapItem('Contact', document.getElementById('nomContact').value + ' — ' + document.getElementById('telContact').value) +
+      recapItem('Marque', document.getElementById('marqueVehicule').value) +
+      recapItem('Modèle', document.getElementById('modeleVehicule').value) +
+      recapItem('Année', document.getElementById('anneeVehicule').value) +
+      recapItem('Kilométrage', parseInt(document.getElementById('kmVehicule').value || 0).toLocaleString('fr-FR') + ' km') +
+      recapItem('Prix', parseInt(document.getElementById('prixVehicule').value || 0).toLocaleString('fr-FR') + ' €') +
+      recapItem('Carburant', document.getElementById('carburantVehicule').value) +
+      recapItem('Boîte', document.getElementById('boiteVehicule').value) +
+      recapItem('Motorisation', document.getElementById('motorisationVehicule').value || '—') +
+      recapItem('État', document.getElementById('etatVehicule').value) +
+      recapItem('Garantie', document.getElementById('garantieVehicule').value) +
+    '</div>';
+
+    if (equipements.length > 0) {
+      html += '<div class="recap-item" style="margin-bottom:12px;"><div class="recap-label">Équipements</div>' +
+        '<div class="recap-value" style="font-size:0.85rem; line-height:1.6;">' + equipements.join(' · ') + '</div></div>';
+    }
+
+    if (document.getElementById('descriptionVehicule').value.trim()) {
+      html += '<div class="recap-item" style="margin-bottom:12px;"><div class="recap-label">Description</div>' +
+        '<div class="recap-value" style="font-size:0.85rem; line-height:1.6;">' + document.getElementById('descriptionVehicule').value + '</div></div>';
+    }
+
+    html += '<div class="recap-item"><div class="recap-label">Photos</div>' +
+      '<div class="recap-value">' + photos.length + ' photo(s) ajoutée(s)</div></div>';
+
+    document.getElementById('recapContent').innerHTML = html;
+  }
+
+  function recapItem(label, val) {
+    return '<div class="recap-item"><div class="recap-label">' + label + '</div><div class="recap-value">' + (val || '—') + '</div></div>';
+  }
+
+  // =====================
+  // SOUMISSION
+  // =====================
+  document.getElementById('submitAnnonce').addEventListener('click', async function() {
+    var btn = this;
+    btn.textContent = 'ENVOI EN COURS...';
+    btn.disabled = true;
+
+    var equipements = [];
+    document.querySelectorAll('#equipementsGrid input[type="checkbox"]:checked').forEach(function(cb) {
+      equipements.push(cb.value);
+    });
+
+    var data = {
+      '🏢 Établissement': document.getElementById('nomGarage').value,
+      '👤 Contact': document.getElementById('nomContact').value,
+      '📞 Téléphone': document.getElementById('telContact').value,
+      '✉️ Email': document.getElementById('emailContact').value,
+      '📍 Ville': document.getElementById('villeGarage').value + ' ' + document.getElementById('deptGarage').value,
+      '📋 Plan': document.getElementById('planGarage').value,
+      '🚗 Marque': document.getElementById('marqueVehicule').value,
+      '🚗 Modèle': document.getElementById('modeleVehicule').value,
+      '📅 Année': document.getElementById('anneeVehicule').value,
+      '🛣️ Kilométrage': document.getElementById('kmVehicule').value + ' km',
+      '💶 Prix': document.getElementById('prixVehicule').value + ' €',
+      '⛽ Carburant': document.getElementById('carburantVehicule').value,
+      '⚙️ Boîte': document.getElementById('boiteVehicule').value,
+      '🔧 Motorisation': document.getElementById('motorisationVehicule').value || '—',
+      '💪 Puissance': document.getElementById('puissanceVehicule').value ? document.getElementById('puissanceVehicule').value + ' ch' : '—',
+      '🎨 Couleur': document.getElementById('couleurVehicule').value || '—',
+      '🚪 Carrosserie': document.getElementById('portesVehicule').value,
+      '🔍 CT': document.getElementById('ctVehicule').value,
+      '👥 Propriétaires': document.getElementById('proprietairesVehicule').value,
+      '⭐ État': document.getElementById('etatVehicule').value,
+      '🛡️ Garantie': document.getElementById('garantieVehicule').value,
+      '✅ Équipements': equipements.join(', ') || 'Aucun coché',
+      '📝 Description': document.getElementById('descriptionVehicule').value || '—',
+      '📸 Nb photos': photos.length + ' photo(s)',
+    };
+
+    try {
+      var res = await fetch('https://formspree.io/f/mzdjwrvd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        document.getElementById('section-5').classList.remove('active');
+        document.getElementById('successScreen').classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error('Erreur');
+      }
+    } catch(e) {
+      btn.textContent = 'SOUMETTRE L\'ANNONCE →';
+      btn.disabled = false;
+      alert('Une erreur est survenue. Veuillez réessayer ou contacter velocar.aura@yahoo.com');
+    }
+  });
+
+  // Checkboxes visuelles
+  document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      this.closest('.checkbox-item').classList.toggle('checked', this.checked);
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
